@@ -55,7 +55,7 @@ st.write("---")
 
 # --- Stocks Section ---
 st.subheader("My Stocks")
-tickers = ['FLO', 'SCHD', 'CSX', 'PFE', 'REYN', 'CAG', 'ULTY' , 'HFXI']
+tickers = ['FLO', 'SCHD', 'PFE', 'REYN', 'CAG', 'ULTY' , 'HFXI']
 selected = st.multiselect("Choose stocks:", tickers, default=tickers)
 
 timeframes = {"1 Week": "5d", "1 Month": "1mo", "6 Months": "6mo", "1 Year": "1y"}

@@ -54,26 +54,38 @@ except Exception as e:
 st.write("---")
 
 # --- Stocks Section ---
-st.subheader("My Stocks")
-tickers = ['FLO', 'SCHD', 'PFE', 'REYN', 'CAG', 'ULTY' , 'HFXI']
-selected = st.multiselect("Choose stocks:", tickers, default=tickers)
+if 'show_stocks' not in st.session_state:
+    st.session_state.show_stocks = False
 
-timeframes = {"1 Week": "5d", "1 Month": "1mo", "6 Months": "6mo", "1 Year": "1y"}
-selected_time = st.selectbox("Timeframe:", list(timeframes.keys()))
+if not st.session_state.show_stocks:
+    if st.button("🔓 Access Market Data"):
+        st.session_state.show_stocks = True
+        st.rerun()
+else:
+    if st.button("🔒 Hide Market Data"):
+        st.session_state.show_stocks = False
+        st.rerun()
 
-if selected:
-    data = yf.download(selected, period=timeframes[selected_time])['Close']
-    
-    for i in range(0, len(selected), 3):
-        cols = st.columns(3)
-        for j, ticker in enumerate(selected[i:i+3]):
-            current = data[ticker].iloc[-1] if len(selected) > 1 else data.iloc[-1]
-            start = data[ticker].iloc[0] if len(selected) > 1 else data.iloc[0]
-            
-            cols[j].metric(ticker, f"${float(current):.2f}", f"{float(current - start):.2f}")
-            
-    # Chart with the Matrix/Hacker green color
-    st.line_chart(data, color=["#00FF41"] * len(selected))
+    st.subheader("My Stocks")
+    tickers = ['FLO', 'SCHD', 'PFE', 'REYN', 'CAG', 'ULTY' , 'HFXI']
+    selected = st.multiselect("Choose stocks:", tickers, default=tickers)
+
+    timeframes = {"1 Week": "5d", "1 Month": "1mo", "6 Months": "6mo", "1 Year": "1y"}
+    selected_time = st.selectbox("Timeframe:", list(timeframes.keys()))
+
+    if selected:
+        data = yf.download(selected, period=timeframes[selected_time])['Close']
+        
+        for i in range(0, len(selected), 3):
+            cols = st.columns(3)
+            for j, ticker in enumerate(selected[i:i+3]):
+                # Handle single vs multiple tickers for indexing
+                current = data[ticker].iloc[-1] if len(selected) > 1 else data.iloc[-1]
+                start = data[ticker].iloc[0] if len(selected) > 1 else data.iloc[0]
+                
+                cols[j].metric(ticker, f"${float(current):.2f}", f"{float(current - start):.2f}")
+                
+        st.line_chart(data, color=["#00FF41"] * len(selected))
 
 st.write("---")
 

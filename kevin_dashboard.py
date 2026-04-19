@@ -70,7 +70,8 @@ else:
     tickers = ['FLO', 'SCHD', 'PFE', 'REYN', 'CAG', 'ULTY' , 'HFXI']
     selected = st.multiselect("Choose stocks:", tickers, default=tickers)
 
-    timeframes = {"1 Week": "5d", "1 Month": "1mo", "6 Months": "6mo", "1 Year": "1y"}
+    //timeframes = {"1 Week": "5d", "1 Month": "1mo", "6 Months": "6mo", "1 Year": "1y"}
+    timeframes = {"1 Day": "1d", "1 Week": "5d", "1 Month": "1mo", "6 Months": "6mo", "1 Year": "1y"}
     selected_time = st.selectbox("Timeframe:", list(timeframes.keys()))
 
     if selected:
